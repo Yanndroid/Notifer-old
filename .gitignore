@@ -1,0 +1,7 @@
+/.gradle
+/.idea
+/local.properties
+/app/google-services.json
+/app/build
+# Project exclude paths
+/build/

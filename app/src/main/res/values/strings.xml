@@ -1,0 +1,19 @@
+<resources>
+    <string name="app_name">Notifer</string>
+
+    <!--Main-->
+
+    <!--Settings-->
+    <string name="system_settings_summary">Transfer notifications to a WebSocket.</string>
+
+    <!--About-->
+    <string name="github" translatable="false">Github</string>
+
+    <!--firebase-->
+    <string name="firebase_childName" translatable="false">Notifer</string>
+    <string name="firebase_versionCode" translatable="false">versionCode</string>
+    <string name="firebase_github" translatable="false">github</string>
+    <string name="firebase_versionName" translatable="false">versionName</string>
+    <string name="firebase_apk" translatable="false">apk</string>
+
+</resources>

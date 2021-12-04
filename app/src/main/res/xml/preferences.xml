@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<de.dlyt.yanndroid.oneui.preference.PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <de.dlyt.yanndroid.notifer.preferences.TipCardPreference
+        android:key="noti_access_tip"
+        android:summary="Notification access is needed. Click to open it."
+        android:title="Notification access" />
+
+    <PreferenceCategory android:key="tip_space" />
+
+    <de.dlyt.yanndroid.notifer.preferences.SwitchBarPreference android:key="service_enabled" />
+
+    <PreferenceCategory android:title="Settings">
+        <EditTextPreference
+            android:key="ws_ip"
+            android:title="IP" />
+        <EditTextPreference
+            android:key="ws_port"
+            android:title="Port" />
+        <PreferenceScreen
+            android:key="enabled_apps"
+            android:summary="Apps whose notifications should be sent to the WS."
+            android:title="Apps">
+            <intent
+                android:targetClass="de.dlyt.yanndroid.notifer.EnabledAppsActivity"
+                android:targetPackage="de.dlyt.yanndroid.notifer" />
+        </PreferenceScreen>
+        <PreferenceScreen
+            android:key="test_ws"
+            android:summary="Post a notification which will be transferred to the WebSocket."
+            android:title="Test" />
+    </PreferenceCategory>
+
+    <PreferenceCategory>
+        <PreferenceScreen
+            android:key="about_app"
+            android:title="About Notifer">
+            <intent
+                android:targetClass="de.dlyt.yanndroid.notifer.AboutActivity"
+                android:targetPackage="de.dlyt.yanndroid.notifer" />
+        </PreferenceScreen>
+    </PreferenceCategory>
+
+</de.dlyt.yanndroid.oneui.preference.PreferenceScreen>

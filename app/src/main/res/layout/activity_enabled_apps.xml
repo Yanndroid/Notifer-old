@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<de.dlyt.yanndroid.oneui.layout.ToolbarLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/toolbar_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:navigationIcon="@drawable/ic_samsung_back"
+    app:title="Apps"
+    tools:context=".MainActivity">
+
+    <de.dlyt.yanndroid.oneui.view.RecyclerView
+        android:id="@+id/app_list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scrollbars="vertical" />
+
+</de.dlyt.yanndroid.oneui.layout.ToolbarLayout>
