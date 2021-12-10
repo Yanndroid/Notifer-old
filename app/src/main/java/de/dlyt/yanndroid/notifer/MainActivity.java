@@ -1,8 +1,6 @@
 package de.dlyt.yanndroid.notifer;
 
 import android.annotation.SuppressLint;
-import android.app.NotificationChannel;
-import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -11,21 +9,22 @@ import android.provider.Settings;
 import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.NotificationCompat;
-import androidx.core.app.NotificationManagerCompat;
 
 import de.dlyt.yanndroid.notifer.preferences.SwitchBarPreference;
 import de.dlyt.yanndroid.notifer.preferences.TipCardPreference;
 import de.dlyt.yanndroid.notifer.service.NotificationListener;
+import de.dlyt.yanndroid.notifer.utils.TestDialog;
 import de.dlyt.yanndroid.notifer.utils.Updater;
 import de.dlyt.yanndroid.oneui.layout.PreferenceFragment;
 import de.dlyt.yanndroid.oneui.layout.ToolbarLayout;
+import de.dlyt.yanndroid.oneui.preference.DropDownPreference;
 import de.dlyt.yanndroid.oneui.preference.EditTextPreference;
 import de.dlyt.yanndroid.oneui.preference.Preference;
 import de.dlyt.yanndroid.oneui.preference.PreferenceGroup;
 import de.dlyt.yanndroid.oneui.preference.internal.PreferencesRelatedCard;
 
 public class MainActivity extends AppCompatActivity {
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,18 +35,8 @@ public class MainActivity extends AppCompatActivity {
         toolbarLayout.setNavigationButtonTooltip(getString(R.string.sesl_navigate_up));
         toolbarLayout.setNavigationButtonOnClickListener(v -> onBackPressed());
 
-        createNotificationChannel();
-
         if (savedInstanceState == null)
             getSupportFragmentManager().beginTransaction().replace(R.id.settings, new SettingsFragment()).commit();
-    }
-
-    private void createNotificationChannel() {
-        int importance = NotificationManager.IMPORTANCE_DEFAULT;
-        NotificationChannel channel = new NotificationChannel("notification_channel_id", "Test notification", importance);
-        channel.setDescription("Needed by Notifer to post a notification.");
-        NotificationManager notificationManager = getSystemService(NotificationManager.class);
-        notificationManager.createNotificationChannel(channel);
     }
 
     public static class SettingsFragment extends PreferenceFragment {
@@ -57,10 +46,13 @@ public class MainActivity extends AppCompatActivity {
         private PreferencesRelatedCard mRelatedCard;
         private SwitchBarPreference switchBarPreference;
 
+        private TestDialog testDialog;
+
         @Override
         public void onAttach(Context context) {
             super.onAttach(context);
             mContext = context;
+            testDialog = new TestDialog(mContext);
         }
 
         @Override
@@ -129,16 +121,17 @@ public class MainActivity extends AppCompatActivity {
                 return true;
             });
 
+            DropDownPreference color_format = (DropDownPreference) findPreference("color_format");
+            color_format.setSummary(color_format.getEntry());
+            color_format.seslSetSummaryColor(getResources().getColor(R.color.primary_color, mContext.getTheme()));
+            color_format.setOnPreferenceChangeListener((preference, newValue) -> {
+                color_format.setValue(newValue.toString());
+                preference.setSummary(color_format.getEntry());
+                return true;
+            });
+
             findPreference("test_ws").setOnPreferenceClickListener(var1 -> {
-                //NotificationListener.testWS();
-
-                NotificationManagerCompat.from(mContext).notify(444, new NotificationCompat.Builder(mContext, "notification_channel_id")
-                        .setSmallIcon(R.drawable.ic_launcher)
-                        .setContentTitle("Test notification")
-                        .setContentText("This notification should appear in your WebSocket.")
-                        .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-                        .build());
-
+                testDialog.show();
                 return false;
             });
 

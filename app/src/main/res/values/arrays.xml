@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string-array name="preferences_color_format_entries">
+        <item>Hex string</item>
+        <item>RGB array</item>
+        <item>HSV array</item>
+        <item>Integer</item>
+    </string-array>
+    <string-array name="preferences_color_format_values">
+        <item>hex</item>
+        <item>rgb</item>
+        <item>hsv</item>
+        <item>int</item>
+    </string-array>
+
+</resources>

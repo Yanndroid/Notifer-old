@@ -17,6 +17,11 @@
         <EditTextPreference
             android:key="ws_port"
             android:title="Port" />
+        <DropDownPreference
+            android:entries="@array/preferences_color_format_entries"
+            android:entryValues="@array/preferences_color_format_values"
+            android:key="color_format"
+            android:title="Color format" />
         <PreferenceScreen
             android:key="enabled_apps"
             android:summary="Apps whose notifications should be sent to the WS."
@@ -27,7 +32,7 @@
         </PreferenceScreen>
         <PreferenceScreen
             android:key="test_ws"
-            android:summary="Post a notification which will be transferred to the WebSocket."
+            android:summary="Create a sample message."
             android:title="Test" />
     </PreferenceCategory>
 

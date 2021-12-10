@@ -1,0 +1,237 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="20dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center_vertical"
+            android:paddingBottom="12dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Application"
+                android:textColor="@color/sesl_list_subheader_text_color"
+                android:textSize="@dimen/sesl_list_subheader_text_size"
+                android:textStyle="bold" />
+
+            <View
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:layout_marginStart="16.0dip"
+                android:background="@drawable/sesl_drawer_divider" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/dialog_test_color"
+                android:layout_width="40.0dip"
+                android:layout_height="40.0dip"
+                android:background="?selectableItemBackgroundBorderless" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingStart="10dp">
+
+                <EditText
+                    android:id="@+id/dialog_test_label"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginVertical="4dp"
+                    android:hint="Label"
+                    android:imeOptions="actionNext"
+                    android:inputType="text" />
+
+                <EditText
+                    android:id="@+id/dialog_test_package"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginVertical="4dp"
+                    android:hint="Package"
+                    android:imeOptions="actionNext"
+                    android:inputType="text" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center_vertical"
+            android:paddingVertical="12dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Notification"
+                android:textColor="@color/sesl_list_subheader_text_color"
+                android:textSize="@dimen/sesl_list_subheader_text_size"
+                android:textStyle="bold" />
+
+            <View
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:layout_marginStart="16.0dip"
+                android:background="@drawable/sesl_drawer_divider" />
+        </LinearLayout>
+
+        <EditText
+            android:id="@+id/dialog_test_template"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginVertical="4dp"
+            android:hint="Template"
+            android:imeOptions="actionNext"
+            android:inputType="text" />
+
+        <EditText
+            android:id="@+id/dialog_test_id"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginVertical="4dp"
+            android:hint="Id"
+            android:imeOptions="actionNext"
+            android:inputType="number" />
+
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginVertical="10dp"
+            app:cardBackgroundColor="@color/background_color">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="20dp"
+                android:layout_marginVertical="10dp"
+                android:orientation="vertical">
+
+                <EditText
+                    android:id="@+id/dialog_test_title"
+                    style="?textAppearanceListItem"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginVertical="4dp"
+                    android:hint="Title"
+                    android:imeOptions="actionNext"
+                    android:inputType="text" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <EditText
+                        android:id="@+id/dialog_test_text"
+                        style="?android:attr/textAppearanceSmall"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginVertical="4dp"
+                        android:layout_weight="1"
+                        android:hint="Text"
+                        android:imeOptions="actionNext"
+                        android:inputType="text" />
+
+                    <EditText
+                        android:id="@+id/dialog_test_sub_text"
+                        style="?android:attr/textAppearanceSmall"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginVertical="4dp"
+                        android:hint="Sub text"
+                        android:imeOptions="actionDone"
+                        android:inputType="text" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </com.google.android.material.card.MaterialCardView>
+
+        <de.dlyt.yanndroid.oneui.view.Switch
+            android:id="@+id/dialog_test_ongoing"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginVertical="8dp"
+            android:text="Ongoing" />
+
+        <de.dlyt.yanndroid.oneui.view.Switch
+            android:id="@+id/dialog_test_removed"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginVertical="8dp"
+            android:text="Removed" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center_vertical"
+            android:paddingVertical="12dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Progress"
+                android:textColor="@color/sesl_list_subheader_text_color"
+                android:textSize="@dimen/sesl_list_subheader_text_size"
+                android:textStyle="bold" />
+
+            <View
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:layout_marginStart="16.0dip"
+                android:background="@drawable/sesl_drawer_divider" />
+        </LinearLayout>
+
+        <de.dlyt.yanndroid.oneui.view.Switch
+            android:id="@+id/dialog_test_indeterminate"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginVertical="8dp"
+            android:text="Indeterminate" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingVertical="8dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingEnd="5dp"
+                android:text="Progress"
+                android:textColor="@color/item_color"
+                android:textSize="16sp" />
+
+            <de.dlyt.yanndroid.oneui.view.SeekBar
+                android:id="@+id/dialog_test_progress"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:seslSeekBarMode="expand" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+</ScrollView>

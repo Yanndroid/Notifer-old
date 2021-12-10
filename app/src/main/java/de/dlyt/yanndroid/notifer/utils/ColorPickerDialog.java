@@ -5,6 +5,7 @@ import android.content.Context;
 import android.graphics.drawable.GradientDrawable;
 
 import de.dlyt.yanndroid.notifer.EnabledAppsActivity;
+import de.dlyt.yanndroid.notifer.R;
 import de.dlyt.yanndroid.notifer.service.NotificationListener;
 import de.dlyt.yanndroid.oneui.dialog.ClassicColorPickerDialog;
 
@@ -26,7 +27,7 @@ public class ColorPickerDialog {
 
                     colorPickerDialog.getColorPicker().getRecentColorInfo().initRecentColorInfo(new int[]{i});
 
-                    GradientDrawable drawable = (GradientDrawable) context.getDrawable(de.dlyt.yanndroid.oneui.R.drawable.color_picker_preference_preview).mutate();
+                    GradientDrawable drawable = (GradientDrawable) context.getDrawable(R.drawable.color_picker_preference_preview).mutate();
                     drawable.setColor(i);
                     holder.appColor.setImageDrawable(drawable);
                 }

@@ -6,4 +6,9 @@
         android:icon="@drawable/ic_samsung_search"
         android:title="@string/action_search"
         app:showAsAction="always" />
+    <item
+        android:id="@+id/action_filter"
+        android:icon="@drawable/ic_samsung_list_filter"
+        android:title="Filter"
+        app:showAsAction="always" />
 </menu>

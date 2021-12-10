@@ -42,7 +42,9 @@ public class WebSocket {
     }
 
     private boolean validAddress() {
-        return ip != null && port != null; //todo
+        boolean ip_valid = ip != null && ip.matches("^[0-9.]+$");
+        boolean port_valid = port != null && port.matches("^[0-9]+$");
+        return ip_valid && port_valid;
     }
 
     public void disconnect() {

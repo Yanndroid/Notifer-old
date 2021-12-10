@@ -36,6 +36,7 @@ import java.util.List;
 
 import de.dlyt.yanndroid.notifer.utils.AppInfoListItem;
 import de.dlyt.yanndroid.notifer.utils.ColorPickerDialog;
+import de.dlyt.yanndroid.notifer.utils.FilterDialog;
 import de.dlyt.yanndroid.oneui.dialog.ProgressDialog;
 import de.dlyt.yanndroid.oneui.layout.ToolbarLayout;
 import de.dlyt.yanndroid.oneui.sesl.recyclerview.SeslLinearLayoutManager;
@@ -54,6 +55,8 @@ public class EnabledAppsActivity extends AppCompatActivity {
     private AppsAdapter appsAdapter;
     private List<AppInfoListItem> app_list;
     private String mSearchText;
+    private Boolean mFilterOnlyUserEquals = true; //null = all , true = user , false = system
+    private Boolean mFilterOnlyCheckedEquals = null; //null = all , true = checked , false = !checked
     private String mColorCode;
 
 
@@ -87,19 +90,9 @@ public class EnabledAppsActivity extends AppCompatActivity {
 
                 int app_count = installedPackages.size();
                 for (int i = 0; i < app_count; i++) {
-                    PackageInfo packageInfo = installedPackages.get(i);
-                    /*if ((packageInfo.applicationInfo.flags & ApplicationInfo.FLAG_SYSTEM) == 0)*/
-                    appInfoListItems.add(new AppInfoListItem(
-                            mContext,
-                            packageInfo.applicationInfo.loadLabel(packageManager).toString(),
-                            packageInfo.packageName,
-                            packageInfo.applicationInfo.loadIcon(packageManager),
-                            enabled_packages.containsKey(packageInfo.packageName),
-                            enabled_packages.get(packageInfo.packageName)));
+                    appInfoListItems.add(new AppInfoListItem(mContext, installedPackages.get(i)));
                     publishProgress(i, app_count);
                 }
-
-                appInfoListItems.add(null);
                 return appInfoListItems;
             }
 
@@ -113,7 +106,6 @@ public class EnabledAppsActivity extends AppCompatActivity {
             @Override
             protected void onPostExecute(List<AppInfoListItem> appInfoListItems) {
                 app_list = appInfoListItems;
-                toolbarLayout.setToolbarMenuItemEnabled(toolbarLayout.getToolbarMenu().findItem(R.id.action_search), true);
                 initRecycler();
                 progressDialog.dismiss();
             }
@@ -133,11 +125,15 @@ public class EnabledAppsActivity extends AppCompatActivity {
         toolbarLayout.setNavigationButtonOnClickListener(v -> onBackPressed());
         toolbarLayout.inflateToolbarMenu(R.menu.app_screen_menu);
         toolbarLayout.setOnToolbarMenuItemClickListener(item -> {
-            if (item.getItemId() == R.id.action_search) {
-                toolbarLayout.showSearchMode();
+            switch (item.getItemId()) {
+                case R.id.action_search:
+                    toolbarLayout.showSearchMode();
+                    break;
+                case R.id.action_filter:
+                    showFilterDialog();
+                    break;
             }
         });
-        toolbarLayout.setToolbarMenuItemEnabled(toolbarLayout.getToolbarMenu().findItem(R.id.action_search), false);
         toolbarLayout.setSearchModeListener(new ToolbarLayout.SearchModeListener() {
             @Override
             public void onSearchOpened(EditText search_edittext) {
@@ -177,6 +173,17 @@ public class EnabledAppsActivity extends AppCompatActivity {
         });
     }
 
+    private void showFilterDialog() {
+        new FilterDialog(mContext, mFilterOnlyUserEquals, mFilterOnlyCheckedEquals, new FilterDialog.DialogListener() {
+            @Override
+            public void onOk(Boolean app_boolean, Boolean state_boolean) {
+                mFilterOnlyUserEquals = app_boolean;
+                mFilterOnlyCheckedEquals = state_boolean;
+                appsAdapter.filter();
+            }
+        }).show();
+    }
+
     private void initRecycler() {
         TypedValue divider = new TypedValue();
         mContext.getTheme().resolveAttribute(android.R.attr.listDivider, divider, true);
@@ -190,7 +197,6 @@ public class EnabledAppsActivity extends AppCompatActivity {
         decoration.setDivider(mContext.getDrawable(divider.resourceId));
 
         recyclerView.seslSetGoToTopEnabled(true);
-        recyclerView.seslSetLastRoundedCorner(true);
         recyclerView.seslSetFillBottomEnabled(true);
         recyclerView.setBackgroundColor(getColor(R.color.item_background_color));
     }
@@ -203,10 +209,6 @@ public class EnabledAppsActivity extends AppCompatActivity {
             public int compare(AppInfoListItem o1, AppInfoListItem o2) {
                 if (o1 == null) return 1;
                 if (o2 == null) return -1;
-
-                /*if (o1.checked && !o2.checked) return -1;
-                if (!o1.checked && o2.checked) return 1;*/
-
                 return o1.label.compareToIgnoreCase(o2.label);
             }
 
@@ -245,7 +247,8 @@ public class EnabledAppsActivity extends AppCompatActivity {
 
         public AppsAdapter() {
             super();
-            sorted_list.addAll(app_list);
+            filter();
+            sorted_list.add(null);
             colorPickerDialog = new ColorPickerDialog(mContext);
         }
 
@@ -262,15 +265,13 @@ public class EnabledAppsActivity extends AppCompatActivity {
 
         public void filter() {
             sorted_list.beginBatchedUpdates();
-            for (int i = 0; i < app_list.size() - 1; i++) {
+            for (int i = 0; i < app_list.size(); i++) {
                 final AppInfoListItem appInfoListItem = app_list.get(i);
 
-                if (containsSearch(appInfoListItem.label, appInfoListItem.packageName)) {
+                if (filterCondition(appInfoListItem)) {
                     sorted_list.add(appInfoListItem);
                     AppsAdapter.ViewHolder holder = (ViewHolder) recyclerView.findViewHolderForAdapterPosition(sorted_list.indexOf(appInfoListItem));
-                    if (holder != null) {
-                        setListItemText(holder, appInfoListItem);
-                    }
+                    if (holder != null) setListItemText(holder, appInfoListItem);
                 } else {
                     sorted_list.remove(appInfoListItem);
                 }
@@ -279,14 +280,17 @@ public class EnabledAppsActivity extends AppCompatActivity {
             recyclerView.scrollToPosition(0);
         }
 
-        private boolean containsSearch(String s1, String s2) {
-            return (s1.toLowerCase().contains(mSearchText.toLowerCase()) || s2.toLowerCase().contains(mSearchText.toLowerCase()));
+        private boolean filterCondition(AppInfoListItem appInfoListItem) {
+            boolean labelContainsSearch = mSearchText == null || appInfoListItem.label.toLowerCase().contains(mSearchText.toLowerCase());
+            boolean packageContainsSearch = mSearchText == null || appInfoListItem.packageName.toLowerCase().contains(mSearchText.toLowerCase());
+            return (labelContainsSearch || packageContainsSearch)
+                    && (mFilterOnlyUserEquals == null || mFilterOnlyUserEquals == appInfoListItem.userApp)
+                    && (mFilterOnlyCheckedEquals == null || (mFilterOnlyCheckedEquals == appInfoListItem.checked));
         }
 
         @Override
         public AppsAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             int resId = 0;
-
             switch (viewType) {
                 case 0:
                     resId = R.layout.app_listview_item;
@@ -304,8 +308,6 @@ public class EnabledAppsActivity extends AppCompatActivity {
         public void onBindViewHolder(AppsAdapter.ViewHolder holder, final int position) {
             if (holder.isItem) {
                 final AppInfoListItem appInfoListItem = sorted_list.get(position);
-                setItemEnabled(holder, !appInfoListItem.packageName.equals("de.dlyt.yanndroid.notifer"));
-
                 setListItemText(holder, appInfoListItem);
                 holder.appIcon.setImageDrawable(appInfoListItem.icon);
 
@@ -317,12 +319,10 @@ public class EnabledAppsActivity extends AppCompatActivity {
                     appInfoListItem.checked = isChecked;
 
                     if (isChecked)
-                        enabled_packages.put(appInfoListItem.packageName, appInfoListItem.color = appInfoListItem.def_color);
+                        enabled_packages.put(appInfoListItem.packageName, appInfoListItem.color = appInfoListItem.loadDominantColor(mContext));
                     else enabled_packages.remove(appInfoListItem.packageName);
 
                     initColorPicker(holder, appInfoListItem);
-
-                    //sorted_list.recalculatePositionOfItemAt(position);
                 });
             }
         }
@@ -334,17 +334,10 @@ public class EnabledAppsActivity extends AppCompatActivity {
             if (var1.appColor != null) var1.appColor.setOnClickListener(null);
         }
 
-        private void setItemEnabled(ViewHolder holder, boolean itemEnabled) {
-            holder.itemView.setEnabled(itemEnabled);
-            holder.appIcon.setEnabled(itemEnabled);
-            holder.appTitle.setEnabled(itemEnabled);
-            holder.appPackage.setEnabled(itemEnabled);
-            holder.appColor.setEnabled(itemEnabled);
-            holder.appSwitch.setEnabled(itemEnabled);
-        }
-
         private void initColorPicker(ViewHolder holder, AppInfoListItem appInfoListItem) {
             if (appInfoListItem.checked) {
+                if (appInfoListItem.color == 0)
+                    appInfoListItem.color = appInfoListItem.loadDominantColor(mContext);
                 holder.appColor.setVisibility(View.VISIBLE);
 
                 GradientDrawable drawable = (GradientDrawable) mContext.getDrawable(R.drawable.color_picker_preference_preview).mutate();
