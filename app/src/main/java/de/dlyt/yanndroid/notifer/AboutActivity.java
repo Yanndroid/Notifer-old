@@ -36,7 +36,10 @@ public class AboutActivity extends AppCompatActivity {
             public void updateAvailable(boolean available, String url, String versionName) {
                 if (available) {
                     about_page.setUpdateState(AboutPage.UPDATE_AVAILABLE);
-                    about_page.setUpdateButtonOnClickListener(v -> Updater.downloadAndInstall(getBaseContext(), url, versionName));
+                    about_page.setUpdateButtonOnClickListener(v -> {
+                        about_page.findViewById(R.id.update_button).setEnabled(false);
+                        Updater.downloadAndInstall(getBaseContext(), url, versionName);
+                    });
                 } else {
                     about_page.setUpdateState(AboutPage.NO_UPDATE);
                 }
